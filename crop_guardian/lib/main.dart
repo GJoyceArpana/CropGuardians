@@ -1,22 +1,31 @@
 import 'package:flutter/material.dart';
-import 'pages/welcome_page.dart';
+import 'package:flutter/services.dart';
+import 'screens/splash_screen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const CropGuardiansApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-  
+class CropGuardiansApp extends StatelessWidget {
+  const CropGuardiansApp({super.key});
+
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark,
+      ),
+    );
+
     return MaterialApp(
       title: 'CropGuardians',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.green,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: const WelcomePage(),
-      debugShowCheckedModeBanner: false,
+      home: const SplashScreen(),
     );
   }
 }
