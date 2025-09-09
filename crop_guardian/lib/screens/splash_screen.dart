@@ -3,7 +3,7 @@ import '../constants/colors.dart';
 import '../constants/text_styles.dart';
 import '../widgets/gradient_background.dart';
 import '../widgets/custom_logo.dart';
-import 'signup_screen.dart';
+import 'welcome_screen.dart'; // Changed to welcome_screen.dart
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -24,13 +24,11 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
   void initState() {
     super.initState();
 
-    // Animation controller for logo scaling
     _logoController = AnimationController(
       duration: const Duration(milliseconds: 1200),
       vsync: this,
     );
 
-    // Animation controller for text fade and slide
     _textController = AnimationController(
       duration: const Duration(milliseconds: 800),
       vsync: this,
@@ -76,14 +74,14 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
     await Future.delayed(const Duration(milliseconds: 600));
     _textController.forward();
 
-    // Auto navigate to signup after 3 seconds
+    // Auto navigate to welcome screen after 3 seconds
     await Future.delayed(const Duration(seconds: 3));
 
     if (mounted && !_navigated) {
       _navigated = true;
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const LoginScreen()),
+        MaterialPageRoute(builder: (context) => const WelcomeScreen()),
       );
     }
   }
