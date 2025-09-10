@@ -12,16 +12,27 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
 
   void _login() {
-    // Implement your login logic here (API/network call)
-    // Validate phone and password, then authenticate user
-    // Example: Navigator.pushNamed(context, '/home');
+    final phone = _phoneController.text.trim();
+    final password = _passwordController.text;
+
+    // Basic validation example
+    if (phone.length != 10 || password.length < 6) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Enter valid phone and password')),
+      );
+      return;
+    }
+
+    // Replace this with your real authentication logic
+    // On success, navigate to home
+    Navigator.pushReplacementNamed(context, '/home');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: BackButton(),
+        leading: const BackButton(),
         title: const Text('Login'),
         elevation: 0,
         backgroundColor: Colors.white,
@@ -33,7 +44,10 @@ class _LoginScreenState extends State<LoginScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 20),
-            const Text('Phone Number', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+            const Text(
+              'Phone Number',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            ),
             const SizedBox(height: 8),
             TextField(
               controller: _phoneController,
@@ -42,7 +56,9 @@ class _LoginScreenState extends State<LoginScreen> {
               decoration: InputDecoration(
                 prefixText: '+91 ',
                 hintText: 'Enter 10-digit mobile number',
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                ),
                 counterText: "",
                 fillColor: Colors.grey[100],
                 filled: true,
@@ -56,14 +72,19 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             const SizedBox(height: 18),
-            const Text('Password', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+            const Text(
+              'Password',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            ),
             const SizedBox(height: 8),
             TextField(
               controller: _passwordController,
               obscureText: true,
               decoration: InputDecoration(
                 hintText: 'Enter your password',
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                ),
                 fillColor: Colors.grey[100],
                 filled: true,
               ),
@@ -82,7 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
-                  shape: StadiumBorder(),
+                  shape: const StadiumBorder(),
                 ),
                 child: const Text('Login', style: TextStyle(fontSize: 18)),
                 onPressed: _login,
@@ -93,7 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
               alignment: Alignment.center,
               child: TextButton(
                 onPressed: () {
-                  // Implement forgot password logic
+                  // Implement forgot password logic here
                   // Example: Navigator.pushNamed(context, '/forgot-password');
                 },
                 child: const Text(

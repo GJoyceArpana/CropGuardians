@@ -17,6 +17,24 @@ class ProfileScreen extends StatelessWidget {
         padding: const EdgeInsets.all(18),
         child: Column(
           children: [
+            // Profile Picture circle (added)
+            Center(
+              child: CircleAvatar(
+                radius: 56,
+                backgroundColor: Colors.green.shade100,
+                backgroundImage:
+                    const AssetImage('images/profile_pic.png'), // Replace with your profile image
+                child: const Text(
+                  'JF',
+                  style: TextStyle(
+                    color: Colors.green,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 32,
+                  ),
+                ), // fallback initials if image not loaded
+              ),
+            ),
+            const SizedBox(height: 18),
             // Profile Header Card
             Container(
               decoration: BoxDecoration(
@@ -27,19 +45,7 @@ class ProfileScreen extends StatelessWidget {
               padding: const EdgeInsets.all(18),
               child: Row(
                 children: [
-                  // Profile "pic"
-                  CircleAvatar(
-                    backgroundColor: Colors.green.shade100,
-                    radius: 38,
-                    child: const Text(
-                      'JF',
-                      style: TextStyle(
-                        color: Colors.green,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 28,
-                      ),
-                    ),
-                  ),
+                  // Profile "pic" circle removed here because added above
                   const SizedBox(width: 18),
                   // Name and details
                   Expanded(

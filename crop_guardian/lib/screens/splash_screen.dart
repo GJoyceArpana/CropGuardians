@@ -3,7 +3,6 @@ import '../constants/colors.dart';
 import '../constants/text_styles.dart';
 import '../widgets/gradient_background.dart';
 import '../widgets/custom_logo.dart';
-import 'welcome_screen.dart'; // Changed to welcome_screen.dart
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -74,15 +73,11 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
     await Future.delayed(const Duration(milliseconds: 600));
     _textController.forward();
 
-    // Auto navigate to welcome screen after 3 seconds
+    // After 3 seconds, go to WelcomeScreen (by name)
     await Future.delayed(const Duration(seconds: 3));
-
     if (mounted && !_navigated) {
       _navigated = true;
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const WelcomeScreen()),
-      );
+      Navigator.pushReplacementNamed(context, '/welcome');
     }
   }
 
