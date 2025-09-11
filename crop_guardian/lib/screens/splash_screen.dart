@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../constants/colors.dart';
 import '../constants/text_styles.dart';
 import '../widgets/gradient_background.dart';
 import '../widgets/custom_logo.dart';

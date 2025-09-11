@@ -14,11 +14,11 @@ class HomeScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 1,
         automaticallyImplyLeading: false,
-        title: Row(
+        title: const Row(
           children: [
             Icon(Icons.eco, color: Colors.green, size: 32),
-            const SizedBox(width: 10),
-            const Text(
+            SizedBox(width: 10),
+            Text(
               'CropGuardians',
               style: TextStyle(
                 color: Color(0xFF152340),
@@ -27,7 +27,7 @@ class HomeScreen extends StatelessWidget {
                 letterSpacing: -0.5,
               ),
             ),
-            const Spacer(),
+            Spacer(),
           ],
         ),
         actions: [
