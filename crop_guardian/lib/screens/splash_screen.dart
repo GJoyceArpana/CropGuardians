@@ -10,39 +10,54 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMixin {
+class _SplashScreenState extends State<SplashScreen>
+    with TickerProviderStateMixin {
   late final AnimationController _logoController;
   late final AnimationController _textController;
-  late final Animation<double> _logoAnimation;
-  late final Animation<double> _textAnimation;
-  late final Animation<Offset> _slideAnimation;
+  late final Animation<double> _logoScaleAnimation;
+  late final Animation<double> _logoRotationAnimation;
+  late final Animation<double> _textOpacityAnimation;
+  late final Animation<Offset> _textSlideAnimation;
   bool _navigated = false;
 
   @override
   void initState() {
     super.initState();
 
+    // Initialize controllers
     _logoController = AnimationController(
-      duration: const Duration(milliseconds: 1200),
+      duration: const Duration(milliseconds: 1500),
       vsync: this,
     );
 
     _textController = AnimationController(
-      duration: const Duration(milliseconds: 800),
+      duration: const Duration(milliseconds: 1000),
       vsync: this,
     );
 
-    _logoAnimation = Tween<double>(
+    // Logo animations - scale and rotation
+    _logoScaleAnimation = Tween<double>(
       begin: 0.0,
       end: 1.0,
     ).animate(
       CurvedAnimation(
         parent: _logoController,
-        curve: Curves.elasticOut,
+        curve: const Interval(0.0, 0.7, curve: Curves.elasticOut),
       ),
     );
 
-    _textAnimation = Tween<double>(
+    _logoRotationAnimation = Tween<double>(
+      begin: -0.1,
+      end: 0.0,
+    ).animate(
+      CurvedAnimation(
+        parent: _logoController,
+        curve: const Interval(0.5, 1.0, curve: Curves.easeOutBack),
+      ),
+    );
+
+    // Text animations - opacity and slide
+    _textOpacityAnimation = Tween<double>(
       begin: 0.0,
       end: 1.0,
     ).animate(
@@ -52,28 +67,34 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
       ),
     );
 
-    _slideAnimation = Tween<Offset>(
+    _textSlideAnimation = Tween<Offset>(
       begin: const Offset(0, 0.5),
       end: Offset.zero,
     ).animate(
       CurvedAnimation(
         parent: _textController,
-        curve: Curves.easeOutBack,
+        curve: Curves.easeOutCubic,
       ),
     );
 
+    // Start animation sequence
     _startAnimations();
   }
 
   Future<void> _startAnimations() async {
+    // Initial delay
     await Future.delayed(const Duration(milliseconds: 300));
+    
+    // Start logo animation
     _logoController.forward();
 
-    await Future.delayed(const Duration(milliseconds: 600));
+    // Start text animation after logo is partially complete
+    await Future.delayed(const Duration(milliseconds: 800));
     _textController.forward();
 
-    // After 3 seconds, go to WelcomeScreen (by name)
-    await Future.delayed(const Duration(seconds: 3));
+    // Navigate after 2.5 seconds (reduced from 3 for better UX)
+    await Future.delayed(const Duration(milliseconds: 1500));
+    
     if (mounted && !_navigated) {
       _navigated = true;
       Navigator.pushReplacementNamed(context, '/welcome');
@@ -94,58 +115,62 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
         child: SafeArea(
           child: Column(
             children: [
-              Expanded(
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      AnimatedBuilder(
-                        animation: _logoAnimation,
-                        builder: (context, child) {
-                          return Transform.scale(
-                            scale: _logoAnimation.value,
-                            child: const CustomLogo(size: 140),
-                          );
-                        },
-                      ),
-                      const SizedBox(height: 60),
-                      AnimatedBuilder(
-                        animation: _textAnimation,
-                        builder: (context, child) {
-                          return SlideTransition(
-                            position: _slideAnimation,
-                            child: FadeTransition(
-                              opacity: _textAnimation,
-                              child: const Text(
-                                'CropGuardians',
-                                style: AppTextStyles.companyName,
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                      const SizedBox(height: 12),
-                      AnimatedBuilder(
-                        animation: _textAnimation,
-                        builder: (context, child) {
-                          return SlideTransition(
-                            position: _slideAnimation,
-                            child: FadeTransition(
-                              opacity: _textAnimation,
-                              child: const Text(
-                                'Your Partner in Healthy Farming',
-                                style: AppTextStyles.tagline,
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                ),
+              const Spacer(flex: 2),
+              // Logo with combined scale and rotation animation
+              AnimatedBuilder(
+                animation: _logoController,
+                builder: (context, child) {
+                  return Transform(
+                    alignment: Alignment.center,
+                    transform: Matrix4.identity()
+                      ..scale(_logoScaleAnimation.value)
+                      ..rotateZ(_logoRotationAnimation.value),
+                    child: const CustomLogo(size: 140),
+                  );
+                },
               ),
+              const Spacer(),
+              // Text content with combined animations
+              AnimatedBuilder(
+                animation: _textController,
+                builder: (context, child) {
+                  return SlideTransition(
+                    position: _textSlideAnimation,
+                    child: FadeTransition(
+                      opacity: _textOpacityAnimation,
+                      child: Column(
+                        children: [
+                          const Text(
+                            'CropGuardians',
+                            style: AppTextStyles.companyName,
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 8),
+                          const Text(
+                            'Your Partner in Healthy Farming',
+                            style: AppTextStyles.tagline,
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 24),
+                          // Adding a subtle loading indicator
+                          SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              value: _textController.isCompleted 
+                                  ? null 
+                                  : _textController.value,
+                              color: Colors.white.withOpacity(0.7),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+              const Spacer(flex: 3),
             ],
           ),
         ),
