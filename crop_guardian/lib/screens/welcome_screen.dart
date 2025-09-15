@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'login_screen.dart';
-import 'signup_screen.dart';
 
 class WelcomeScreen extends StatelessWidget {
-  const WelcomeScreen({Key? key}) : super(key: key);
+  const WelcomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,28 +19,45 @@ class WelcomeScreen extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Circular plant photo
+                    // Circular plant photo with gradient background
                     Container(
                       width: 280,
                       height: 280,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
+                        gradient: RadialGradient(
+                          colors: [
+                            Colors.green[100]!,
+                            Colors.green[50]!,
+                            Colors.white,
+                          ],
+                        ),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.green.withOpacity(0.1),
-                            blurRadius: 24,
-                            spreadRadius: 4,
+                            color: Colors.green.withOpacity(0.15),
+                            blurRadius: 32,
+                            spreadRadius: 8,
                             offset: const Offset(0, 8),
                           ),
                         ],
                       ),
                       child: ClipOval(
                         child: Image.asset(
-                          'images/plant.png',
+                          'assets/images/plant.png', // Updated path
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) {
+                            // Fallback widget when image is not found
                             return Container(
-                              color: Colors.green[50],
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                gradient: RadialGradient(
+                                  colors: [
+                                    Colors.green[200]!,
+                                    Colors.green[100]!,
+                                    Colors.green[50]!,
+                                  ],
+                                ),
+                              ),
                               child: const Icon(
                                 Icons.eco,
                                 color: Colors.green,
@@ -55,16 +70,23 @@ class WelcomeScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 32),
                     // Logo and App Name row
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(
-                          logoIcon,
-                          color: Colors.green,
-                          size: 36,
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Colors.green[50],
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Icon(
+                            logoIcon,
+                            color: Colors.green[700],
+                            size: 36,
+                          ),
                         ),
-                        SizedBox(width: 8),
-                        Text(
+                        const SizedBox(width: 12),
+                        const Text(
                           'CropGuardians',
                           style: TextStyle(
                             fontSize: 32,
@@ -76,11 +98,21 @@ class WelcomeScreen extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 12),
-                    const Text(
+                    Text(
                       'Your Partner in Healthy Farming',
                       style: TextStyle(
                         fontSize: 18,
-                        color: Colors.grey,
+                        color: Colors.grey[600],
+                        fontWeight: FontWeight.w500,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'AI-powered insights for sustainable agriculture',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey[500],
                         fontWeight: FontWeight.w400,
                       ),
                       textAlign: TextAlign.center,
@@ -95,71 +127,121 @@ class WelcomeScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 28, horizontal: 24),
                 child: Column(
                   children: [
+                    // Sign Up Button
                     SizedBox(
                       width: double.infinity,
                       height: 56,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.green[700],
+                          foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),
                           ),
                           elevation: 2,
+                          shadowColor: Colors.green.withOpacity(0.3),
                         ),
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (_) => const SignupScreen()),
-                          );
+                          Navigator.pushNamed(context, '/signup');
                         },
-                        child: const Text(
-                          'Sign Up',
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                          ),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.person_add, size: 20),
+                            SizedBox(width: 8),
+                            Text(
+                              'Sign Up',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
                     const SizedBox(height: 16),
+                    // Log In Button
                     SizedBox(
                       width: double.infinity,
                       height: 56,
                       child: OutlinedButton(
                         style: OutlinedButton.styleFrom(
                           foregroundColor: Colors.green[700],
-                          side: BorderSide(color: Colors.green[700]!),
+                          side: BorderSide(color: Colors.green[700]!, width: 2),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),
                           ),
                           elevation: 0,
                         ),
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (_) => const LoginScreen()),
-                          );
+                          Navigator.pushNamed(context, '/login');
                         },
-                        child: const Text(
-                          'Log In',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                          ),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.login, size: 20),
+                            SizedBox(width: 8),
+                            Text(
+                              'Log In',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 24),
+                    // Continue as Guest Button
                     TextButton(
                       onPressed: () {
-                        // Add guest mode functionality
+                        // For now, just show a snackbar until home screen is created
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Home screen coming soon!'),
+                            backgroundColor: Colors.orange,
+                          ),
+                        );
+                        // Uncomment when home screen is ready:
+                        // Navigator.pushReplacementNamed(context, '/home');
                       },
-                      child: const Text(
-                        'Continue as Guest',
+                      style: TextButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.visibility,
+                            size: 18,
+                            color: Colors.grey[600],
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            'Continue as Guest',
+                            style: TextStyle(
+                              color: Colors.grey[600],
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Spacer(),
+                    // Features link
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/features');
+                      },
+                      child: Text(
+                        'View App Features →',
                         style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 16,
+                          color: Colors.green[700],
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
